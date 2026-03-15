@@ -1,6 +1,5 @@
-// src/app/saved/page.tsx
-export const dynamic = 'force-dynamic'
 'use client'
+export const dynamic = 'force-dynamic'
 import { useEffect, useState } from 'react'
 import Navbar from '@/components/ui/Navbar'
 import JobCard from '@/components/jobs/JobCard'
