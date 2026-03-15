@@ -51,7 +51,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-8 w-full max-w-sm">
+      <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-10 w-full max-w-md">
         <div className="text-center mb-6">
           <Link href="/" className="text-2xl font-bold text-emerald-700 font-serif">Kazi EA</Link>
           <p className="text-stone-500 text-sm mt-1">Create your free account</p>
@@ -80,24 +80,24 @@ export default function RegisterPage() {
           <div>
             <label className="text-xs font-medium text-stone-600 block mb-1">Full name</label>
             <input type="text" required value={fullName} onChange={e => setFullName(e.target.value)}
-              placeholder="Jane Mwangi" className="input-base" />
+              placeholder="Jane Mwangi" className="input-base !py-3 !text-base" />
           </div>
           {role === 'employer' && (
             <div>
               <label className="text-xs font-medium text-stone-600 block mb-1">Company name</label>
               <input type="text" required value={companyName} onChange={e => setCompanyName(e.target.value)}
-                placeholder="Acme Ltd" className="input-base" />
+                placeholder="Acme Ltd" className="input-base !py-3 !text-base" />
             </div>
           )}
           <div>
             <label className="text-xs font-medium text-stone-600 block mb-1">Email</label>
             <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-              placeholder="you@example.com" className="input-base" />
+              placeholder="you@example.com" className="input-base !py-3 !text-base" />
           </div>
           <div>
             <label className="text-xs font-medium text-stone-600 block mb-1">Password</label>
             <input type="password" required value={password} onChange={e => setPassword(e.target.value)}
-              placeholder="Min. 8 characters" className="input-base" />
+              placeholder="Min. 8 characters" className="input-base !py-3 !text-base" />
           </div>
           <button type="submit" disabled={loading}
             className="btn-primary w-full flex items-center justify-center gap-2 mt-1">
