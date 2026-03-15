@@ -172,7 +172,7 @@ export default function PostJobPage() {
 
           <Field label="Description" required>
             <textarea
-              className="input-base min-h-[120px] resize-none"
+              className="input-base min-h-[280px] resize-y"
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Describe the role, responsibilities, and what success looks like..."
@@ -181,7 +181,7 @@ export default function PostJobPage() {
 
           <Field label="Requirements">
             <textarea
-              className="input-base min-h-[100px] resize-none"
+              className="input-base min-h-[220px] resize-y"
               value={requirements}
               onChange={e => setRequirements(e.target.value)}
               placeholder="List required qualifications, skills, and experience..."
