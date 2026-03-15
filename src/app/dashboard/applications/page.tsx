@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Navbar from '@/components/ui/Navbar'
-import { Loader2, ChevronLeft, FileText, MapPin, GraduationCap, Briefcase, Mail, Phone, ExternalLink, Download } from 'lucide-react'
+import { Loader2, ChevronLeft, FileText, MapPin, GraduationCap, Mail, Phone, ExternalLink, Download } from 'lucide-react'
 import { toast } from 'sonner'
 import { timeAgo } from '@/lib/utils'
 
@@ -79,7 +79,6 @@ export default function ApplicationsPage() {
       .from('applications')
       .update({ status })
       .eq('id', appId)
-
     if (error) { toast.error('Failed to update status'); setUpdatingStatus(false); return }
     setApplications(prev => prev.map(a => a.id === appId ? { ...a, status } : a))
     if (selected?.id === appId) setSelected((prev: any) => ({ ...prev, status }))
@@ -91,17 +90,28 @@ export default function ApplicationsPage() {
     setOpeningCv(true)
     try {
       const supabase = createClient()
-      // Extract path after /cvs/
-      const parts = cvUrl.split('/cvs/')
-      if (parts.length < 2) { window.open(cvUrl, '_blank'); setOpeningCv(false); return }
-      const path = decodeURIComponent(parts[1])
+      // Extract path after /cvs/ and strip any ?token query string
+      const match = cvUrl.match(/\/cvs\/(.+?)(?:\?|$)/)
+      if (!match) {
+        // Can't parse — just open directly
+        window.open(cvUrl, '_blank')
+        setOpeningCv(false)
+        return
+      }
+      const path = decodeURIComponent(match[1])
       const { data, error } = await supabase.storage
         .from('cvs')
-        .createSignedUrl(path, 60 * 60) // 1 hour
-      if (error || !data) { toast.error('Could not open CV — ' + (error?.message || '')); setOpeningCv(false); return }
+        .createSignedUrl(path, 3600)
+      if (error || !data?.signedUrl) {
+        // Fall back to opening the stored URL directly (may already have a token)
+        window.open(cvUrl, '_blank')
+        setOpeningCv(false)
+        return
+      }
       window.open(data.signedUrl, '_blank')
-    } catch (e) {
-      toast.error('Could not open CV')
+    } catch {
+      // Last resort — open whatever URL we have
+      window.open(cvUrl, '_blank')
     }
     setOpeningCv(false)
   }
@@ -110,7 +120,9 @@ export default function ApplicationsPage() {
 
   if (loading) return (
     <div className="min-h-screen bg-stone-50"><Navbar />
-      <div className="flex justify-center py-20"><Loader2 size={28} className="animate-spin text-emerald-500" /></div>
+      <div className="flex justify-center py-20">
+        <Loader2 size={28} className="animate-spin text-emerald-500" />
+      </div>
     </div>
   )
 
@@ -118,13 +130,16 @@ export default function ApplicationsPage() {
     <div className="min-h-screen bg-stone-50">
       <Navbar />
       <main className="max-w-6xl mx-auto px-4 py-8">
+
         <div className="flex items-center gap-4 mb-6">
           <button onClick={() => router.push('/dashboard')} className="p-2 hover:bg-stone-100 rounded-lg text-stone-400">
             <ChevronLeft size={20} />
           </button>
           <div>
             <h1 className="text-2xl font-semibold text-stone-900">Applications</h1>
-            <p className="text-stone-500 text-sm mt-0.5">{applications.length} total application{applications.length !== 1 ? 's' : ''}</p>
+            <p className="text-stone-500 text-sm mt-0.5">
+              {applications.length} total application{applications.length !== 1 ? 's' : ''}
+            </p>
           </div>
         </div>
 
@@ -155,7 +170,8 @@ export default function ApplicationsPage() {
           </div>
         ) : (
           <div className="grid md:grid-cols-5 gap-4">
-            {/* List */}
+
+            {/* Applications list */}
             <div className="md:col-span-2 space-y-2">
               {filtered.map(app => (
                 <div
@@ -192,7 +208,8 @@ export default function ApplicationsPage() {
             <div className="md:col-span-3">
               {selected ? (
                 <div className="bg-white border border-stone-200 rounded-2xl overflow-hidden">
-                  {/* Header */}
+
+                  {/* Applicant header */}
                   <div className="p-6 border-b border-stone-100">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex items-center gap-4">
@@ -207,7 +224,9 @@ export default function ApplicationsPage() {
                             <p className="text-stone-500 text-sm mt-0.5">{selected.seeker.headline}</p>
                           )}
                           <p className="text-xs text-stone-400 mt-1">
-                            Applied for <span className="font-medium text-stone-600">{selected.job?.title}</span> · {timeAgo(selected.created_at)}
+                            Applied for{' '}
+                            <span className="font-medium text-stone-600">{selected.job?.title}</span>
+                            {' '}· {timeAgo(selected.created_at)}
                           </p>
                         </div>
                       </div>
@@ -218,21 +237,25 @@ export default function ApplicationsPage() {
                         className={`text-sm px-3 py-1.5 rounded-full font-medium border-0 outline-none cursor-pointer ${STATUS_STYLES[selected.status]}`}
                       >
                         {STATUS_OPTIONS.map(s => (
-                          <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                          <option key={s} value={s}>
+                            {s.charAt(0).toUpperCase() + s.slice(1)}
+                          </option>
                         ))}
                       </select>
                     </div>
                   </div>
 
-                  {/* Body */}
+                  {/* Scrollable body */}
                   <div className="p-6 space-y-5 overflow-y-auto max-h-[calc(100vh-280px)]">
 
-                    {/* Contact */}
                     <Section title="Contact">
                       <Row icon={Mail} label="Email" value={selected.seeker?.profile?.email} />
                       <Row icon={Phone} label="Phone" value={selected.seeker?.phone} />
                       {(selected.seeker?.town || selected.seeker?.country) && (
-                        <Row icon={MapPin} label="Location" value={[selected.seeker?.address, selected.seeker?.town, selected.seeker?.zip_code, selected.seeker?.country].filter(Boolean).join(', ')} />
+                        <Row icon={MapPin} label="Location" value={
+                          [selected.seeker?.address, selected.seeker?.town, selected.seeker?.zip_code, selected.seeker?.country]
+                            .filter(Boolean).join(', ')
+                        } />
                       )}
                       {selected.seeker?.linkedin_url && (
                         <div className="flex items-center gap-2">
@@ -254,7 +277,6 @@ export default function ApplicationsPage() {
                       )}
                     </Section>
 
-                    {/* Education */}
                     {(selected.seeker?.degree || selected.seeker?.school) && (
                       <Section title="Education">
                         <Row icon={GraduationCap} label="Degree" value={selected.seeker?.degree} />
@@ -265,7 +287,6 @@ export default function ApplicationsPage() {
                       </Section>
                     )}
 
-                    {/* Experience */}
                     {selected.seeker?.experience_summary && (
                       <Section title="Experience">
                         <p className="text-sm text-stone-600 leading-relaxed whitespace-pre-line">
@@ -274,7 +295,6 @@ export default function ApplicationsPage() {
                       </Section>
                     )}
 
-                    {/* Skills */}
                     {selected.seeker?.skills?.length > 0 && (
                       <Section title="Skills">
                         <div className="flex flex-wrap gap-2">
@@ -287,7 +307,6 @@ export default function ApplicationsPage() {
                       </Section>
                     )}
 
-                    {/* Cover letter */}
                     {selected.cover_letter && (
                       <Section title="Cover letter">
                         <p className="text-sm text-stone-600 leading-relaxed whitespace-pre-line">
@@ -296,7 +315,6 @@ export default function ApplicationsPage() {
                       </Section>
                     )}
 
-                    {/* CV */}
                     <Section title="CV / Resume">
                       {selected.seeker?.cv_url ? (
                         <button
@@ -336,6 +354,7 @@ export default function ApplicationsPage() {
                 </div>
               )}
             </div>
+
           </div>
         )}
       </main>
