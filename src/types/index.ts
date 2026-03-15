@@ -1,64 +1,85 @@
 export type UserRole = 'seeker' | 'employer'
-export type JobType = 'full-time' | 'part-time' | 'contract' | 'remote' | 'internship'
-export type JobCategory = 'tech' | 'finance' | 'health' | 'ngo' | 'education' | 'agriculture' | 'logistics' | 'other'
-export type Country = 'Kenya' | 'Uganda' | 'Tanzania' | 'Rwanda' | 'Ethiopia'
-export type ApplicationStatus = 'pending' | 'reviewing' | 'shortlisted' | 'rejected' | 'hired'
-export type JobStatus = 'draft' | 'active' | 'closed' | 'expired'
 
 export interface Profile {
   id: string
   email: string
-  full_name: string
+  full_name: string | null
   role: UserRole
-  avatar_url?: string
-  phone?: string
-  country?: Country
-  bio?: string
-  cv_url?: string
-  cv_filename?: string
-  company_name?: string
-  company_logo_url?: string
-  company_website?: string
+  avatar_url: string | null
   created_at: string
-  updated_at: string
 }
+
+export interface SeekerProfile {
+  id: string
+  user_id: string
+  headline: string | null
+  summary: string | null
+  cv_url: string | null
+  cv_filename: string | null
+  location: string | null
+  skills: string[]
+  experience_years: number | null
+  linkedin_url: string | null
+  portfolio_url: string | null
+}
+
+export interface EmployerProfile {
+  id: string
+  user_id: string
+  company_name: string
+  company_logo_url: string | null
+  industry: string | null
+  company_size: string | null
+  website: string | null
+  description: string | null
+  verified: boolean
+}
+
+export type JobType = 'full-time' | 'part-time' | 'contract' | 'remote' | 'internship'
+
+export type JobCategory =
+  | 'tech' | 'finance' | 'health' | 'ngo' | 'education'
+  | 'agriculture' | 'logistics' | 'hospitality' | 'construction'
+  | 'media' | 'legal' | 'hr' | 'sales' | 'manufacturing'
+  | 'energy' | 'transport' | 'banking' | 'government' | 'other'
+
+export type JobStatus = 'active' | 'closed' | 'draft'
+export type Country = 'Kenya' | 'Uganda' | 'Tanzania' | 'Rwanda' | 'Ethiopia'
 
 export interface Job {
   id: string
   employer_id: string
   title: string
-  company: string
-  company_logo_url?: string
+  description: string
+  requirements: string | null
+  responsibilities: string | null
   country: Country
-  city?: string
+  city: string | null
   type: JobType
   category: JobCategory
-  salary_min?: number
-  salary_max?: number
+  salary_min: number | null
+  salary_max: number | null
   salary_currency: string
-  description: string
-  requirements: string[]
-  benefits: string[]
+  experience_years_min: number | null
   status: JobStatus
   is_featured: boolean
-  application_count: number
-  deadline?: string
+  application_deadline: string | null
   created_at: string
   updated_at: string
-  employer?: Profile
+  employer?: EmployerProfile
+  _count?: { applications: number }
+  is_saved?: boolean
 }
 
 export interface Application {
   id: string
   job_id: string
-  applicant_id: string
-  cover_letter?: string
-  status: ApplicationStatus
-  notes?: string
+  seeker_id: string
+  cover_letter: string | null
+  status: 'pending' | 'reviewing' | 'shortlisted' | 'rejected' | 'hired'
   created_at: string
-  updated_at: string
   job?: Job
-  applicant?: Profile
+  seeker?: SeekerProfile & { profile: Profile }
 }
 
 export interface SavedJob {
@@ -75,5 +96,12 @@ export interface JobFilters {
   category?: JobCategory | ''
   type?: JobType | ''
   salary_min?: number
-  salary_max?: number
+  page?: number
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  count: number
+  page: number
+  totalPages: number
 }
