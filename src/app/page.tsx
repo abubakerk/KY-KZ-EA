@@ -1,4 +1,5 @@
 // src/app/page.tsx
+export const dynamic = 'force-dynamic'
 import { Suspense } from 'react'
 import Navbar from '@/components/ui/Navbar'
 import JobSearch from '@/components/jobs/JobSearch'
