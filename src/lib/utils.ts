@@ -29,6 +29,17 @@ export const CATEGORIES: { value: JobCategory; label: string }[] = [
   { value: 'education', label: 'Education' },
   { value: 'agriculture', label: 'Agriculture' },
   { value: 'logistics', label: 'Logistics' },
+  { value: 'hospitality', label: 'Hospitality & Tourism' },
+  { value: 'construction', label: 'Construction & Engineering' },
+  { value: 'media', label: 'Media & Communications' },
+  { value: 'legal', label: 'Legal & Compliance' },
+  { value: 'hr', label: 'Human Resources' },
+  { value: 'sales', label: 'Sales & Marketing' },
+  { value: 'manufacturing', label: 'Manufacturing' },
+  { value: 'energy', label: 'Energy & Environment' },
+  { value: 'transport', label: 'Transport & Aviation' },
+  { value: 'banking', label: 'Banking & Insurance' },
+  { value: 'government', label: 'Government & Public Sector' },
   { value: 'other', label: 'Other' },
 ]
 
@@ -40,13 +51,11 @@ export const JOB_TYPES: { value: JobType; label: string }[] = [
   { value: 'internship', label: 'Internship' },
 ]
 
-export const CATEGORY_COLORS: Record<JobCategory, string> = {
+export const CATEGORY_COLORS: Record<string, string> = {
   tech: 'bg-blue-50 text-blue-800 border-blue-200',
   finance: 'bg-amber-50 text-amber-800 border-amber-200',
   health: 'bg-green-50 text-green-800 border-green-200',
   ngo: 'bg-purple-50 text-purple-800 border-purple-200',
   education: 'bg-teal-50 text-teal-800 border-teal-200',
   agriculture: 'bg-lime-50 text-lime-800 border-lime-200',
-  logistics: 'bg-orange-50 text-orange-800 border-orange-200',
-  other: 'bg-gray-50 text-gray-700 border-gray-200',
-}
+  logistics: 'bg-o
