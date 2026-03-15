@@ -6,28 +6,41 @@
   :root {
     --brand: #1D9E75;
     --brand-dark: #0F6E56;
+    --brand-light: #E1F5EE;
   }
-  body { @apply text-gray-900; }
-  h1,h2,h3 { @apply tracking-tight; }
+  body {
+    font-family: var(--font-dm-sans), system-ui, sans-serif;
+    @apply text-stone-900;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-brand-400 hover:bg-brand-600 text-white font-medium px-4 py-2.5 rounded-lg transition-colors text-sm;
+    @apply bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 py-2.5 rounded-lg transition-colors text-sm;
   }
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2.5 rounded-lg border border-gray-200 transition-colors text-sm;
+    @apply border border-stone-200 hover:bg-stone-100 text-stone-600 font-medium px-5 py-2.5 rounded-lg transition-colors text-sm bg-white;
   }
   .btn-ghost {
-    @apply hover:bg-gray-100 text-gray-600 font-medium px-3 py-2 rounded-lg transition-colors text-sm;
+    @apply hover:bg-stone-100 text-stone-600 font-medium px-3 py-2 rounded-lg transition-colors text-sm;
+  }
+  .input-base {
+    @apply w-full border border-stone-200 rounded-lg px-4 py-3 text-base bg-white
+           focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400
+           transition-all placeholder:text-stone-400;
   }
   .input {
-    @apply w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-400/30 focus:border-brand-400 text-sm bg-white transition-all;
+    @apply w-full border border-stone-200 rounded-lg px-4 py-3 text-base bg-white
+           focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-400
+           transition-all placeholder:text-stone-400;
   }
   .card {
-    @apply bg-white rounded-xl border border-gray-100 shadow-sm;
+    @apply bg-white border border-stone-200 rounded-xl p-5 hover:border-emerald-300 transition-colors;
   }
   .badge {
-    @apply inline-flex items-center text-xs font-medium px-2 py-0.5 rounded-md border;
+    @apply inline-flex items-center text-xs font-medium px-2.5 py-0.5 rounded-full;
   }
 }
