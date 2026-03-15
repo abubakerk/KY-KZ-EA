@@ -82,7 +82,7 @@ export default function PostJobPage() {
   return (
     <div className="min-h-screen bg-stone-50">
       <Navbar />
-      <main className="max-w-2xl mx-auto px-4 py-10">
+      <main className="max-w-4xl mx-auto px-4 py-10">
         <div className="mb-7">
           <h1 className="text-2xl font-semibold text-stone-900">Post a new job</h1>
           <p className="text-stone-500 text-sm mt-1">Reach thousands of qualified candidates across East Africa</p>
@@ -172,7 +172,7 @@ export default function PostJobPage() {
 
           <Field label="Description" required>
             <textarea
-              className="input-base min-h-[280px] resize-y"
+              className="input-base !text-base min-h-[280px] resize-y"
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="Describe the role, responsibilities, and what success looks like..."
@@ -181,7 +181,7 @@ export default function PostJobPage() {
 
           <Field label="Requirements">
             <textarea
-              className="input-base min-h-[220px] resize-y"
+              className="input-base !text-base min-h-[220px] resize-y"
               value={requirements}
               onChange={e => setRequirements(e.target.value)}
               placeholder="List required qualifications, skills, and experience..."
