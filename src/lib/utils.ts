@@ -58,4 +58,17 @@ export const CATEGORY_COLORS: Record<string, string> = {
   ngo: 'bg-purple-50 text-purple-800 border-purple-200',
   education: 'bg-teal-50 text-teal-800 border-teal-200',
   agriculture: 'bg-lime-50 text-lime-800 border-lime-200',
-  logistics: 'bg-o
+  logistics: 'bg-orange-50 text-orange-800 border-orange-200',
+  hospitality: 'bg-pink-50 text-pink-800 border-pink-200',
+  construction: 'bg-stone-100 text-stone-700 border-stone-300',
+  media: 'bg-violet-50 text-violet-800 border-violet-200',
+  legal: 'bg-slate-50 text-slate-800 border-slate-200',
+  hr: 'bg-rose-50 text-rose-800 border-rose-200',
+  sales: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+  manufacturing: 'bg-zinc-100 text-zinc-700 border-zinc-300',
+  energy: 'bg-yellow-50 text-yellow-800 border-yellow-200',
+  transport: 'bg-sky-50 text-sky-800 border-sky-200',
+  banking: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+  government: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+  other: 'bg-gray-50 text-gray-700 border-gray-200',
+}
