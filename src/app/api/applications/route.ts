@@ -6,7 +6,7 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'job_id is required' }, { status: 400 })
   }
 
-  // Get seeker profile
   const { data: seeker } = await supabase
     .from('seeker_profiles')
     .select('id')
@@ -30,7 +29,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Please complete your profile first' }, { status: 403 })
   }
 
-  // Check not already applied
   const { data: existing } = await supabase
     .from('applications')
     .select('id')
@@ -42,7 +40,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Already applied to this job' }, { status: 409 })
   }
 
-  // Create application
   const { data: application, error } = await supabase
     .from('applications')
     .insert({ job_id, seeker_id: seeker.id, cover_letter })
@@ -56,7 +53,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  // Send email notification to employer
   try {
     const { data: employerProfile } = await supabase
       .from('profiles')
@@ -72,7 +68,7 @@ export async function POST(request: NextRequest) {
 
     if (employerProfile?.email) {
       await resend.emails.send({
-        from: 'Kazi EA <notifications@kazi-ea.com>',
+        from: 'Inua <notifications@inua.co>',
         to: employerProfile.email,
         subject: `New application: ${application.job?.title}`,
         html: `
@@ -87,16 +83,15 @@ export async function POST(request: NextRequest) {
               View Application
             </a>
             <hr style="margin-top:32px;border-color:#eee"/>
-            <p style="color:#999;font-size:12px">Kazi EA — East Africa's Job Platform</p>
+            <p style="color:#999;font-size:12px">Inua — East Africa's Career Platform</p>
           </div>
         `,
       })
     }
 
-    // Confirmation to seeker
     if (seekerProfile?.email) {
       await resend.emails.send({
-        from: 'Kazi EA <notifications@kazi-ea.com>',
+        from: 'Inua <notifications@inua.co>',
         to: seekerProfile.email,
         subject: `Application submitted: ${application.job?.title}`,
         html: `
@@ -116,14 +111,13 @@ export async function POST(request: NextRequest) {
     }
   } catch (emailError) {
     console.error('Email send failed:', emailError)
-    // Don't fail the whole request for email errors
   }
 
   return NextResponse.json({ data: application }, { status: 201 })
 }
 
 export async function GET(request: NextRequest) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -153,7 +147,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ data })
   }
 
-  // Employer: get all applications for their jobs
   const { data: employer } = await supabase
     .from('employer_profiles')
     .select('id')
