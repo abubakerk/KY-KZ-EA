@@ -73,7 +73,7 @@ export default function RegisterPage() {
     <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl border border-stone-200 shadow-sm p-10 w-full max-w-md">
         <div className="text-center mb-6">
-          <Link href="/" className="text-2xl font-bold text-emerald-700 font-serif">Kazi EA</Link>
+          <Link href="/" className="text-2xl font-bold text-emerald-700 font-serif">Inua</Link>
           <p className="text-stone-500 text-sm mt-1">Create your free account</p>
         </div>
 
