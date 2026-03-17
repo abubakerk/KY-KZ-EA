@@ -16,10 +16,6 @@ export default function HomePage() {
       <section className="bg-gradient-to-br from-emerald-50 via-teal-50 to-stone-50 border-b border-stone-200">
         <div className="max-w-5xl mx-auto px-4 py-16 md:py-24">
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 bg-orange-100 text-orange-700 text-xs font-medium px-3 py-1.5 rounded-full mb-4 border border-orange-200">
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse inline-block" />
-              AI-powered job search
-            </span>
             <h1 className="text-4xl md:text-5xl font-semibold text-emerald-900 mb-4 leading-tight">
               Find your next role<br />across East Africa
             </h1>
